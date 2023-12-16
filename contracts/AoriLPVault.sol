@@ -91,12 +91,60 @@ contract AoriLpVault is IERC1271, FlashExecutor, IERC4626 {
         return 0; // TODO:
     }
 
+    function maxRedeem(address _owner) external view returns (uint256) {
+        return 0; // TODO:
+    }
+
     function previewRedeem(uint256 _shares) external view returns (uint256) {
         return 0; // TODO:
     }
 
     function redeem(uint256 _shares, address _receiver, address _owner) external returns (uint256) {
         return 0; // TODO:
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                                 ERC-20
+    //////////////////////////////////////////////////////////////*/
+
+    function allowance(address _owner, address _spender) external view returns (uint256) {
+        return 0; // TODO:
+    }
+
+    function approve(address _spender, uint256 _value) external returns (bool) {
+        return false; // TODO:
+    }
+
+    function balanceOf(address _owner) external view returns (uint256) {
+        return 0; // TODO:
+    }
+
+    function decimals() external view returns (uint8) {
+        return 0; // TODO:
+    }
+
+    function name() external view returns (string memory) {
+        return "Aori LP Vault"; // TODO:
+    }
+
+    function symbol() external view returns (string memory) {
+        return "aLP"; // TODO:
+    }
+
+    function totalSupply() external view returns (uint256) {
+        return 0; // TODO:
+    }
+
+    function transfer(address _to, uint256 _value) external returns (bool) {
+        return false; // TODO:
+    }
+
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    ) external returns (bool) {
+        return false; // TODO:
     }
 
     /*//////////////////////////////////////////////////////////////
