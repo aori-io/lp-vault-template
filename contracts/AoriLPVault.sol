@@ -16,7 +16,15 @@ contract AoriLpVault is IERC1271, FlashExecutor, IERC4626 {
                             STATE VARIABLES
     //////////////////////////////////////////////////////////////*/
 
-    address public aoriProtocol;
+    mapping(address account => uint256) private balances;
+
+    mapping(address account => mapping(address spender => uint256)) private allowances;
+
+    uint256 private _totalSupply;
+
+    string private _name;
+    string private _symbol;
+    address public _aoriProtocol;
 
     // ERC-4626
     address public assetTokenAddress;
@@ -27,12 +35,18 @@ contract AoriLpVault is IERC1271, FlashExecutor, IERC4626 {
 
     constructor(
         address _owner,
-        address _aoriProtocol,
+        address aoriProtocol_,
         address _balancerAddress,
-        address _assetTokenAddress
+        address assetTokenAddress_,
+        string memory name_,
+        string memory symbol_,
+        uint256 totalSupply_
     ) FlashExecutor(_owner, _balancerAddress) {
-        aoriProtocol = _aoriProtocol;
-        assetTokenAddress = _assetTokenAddress;
+        _aoriProtocol = aoriProtocol_;
+        assetTokenAddress = assetTokenAddress_;
+        _name = name_;
+        _symbol = symbol_;
+        _totalSupply = totalSupply_;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -107,32 +121,45 @@ contract AoriLpVault is IERC1271, FlashExecutor, IERC4626 {
                                  ERC-20
     //////////////////////////////////////////////////////////////*/
 
-    function allowance(address _owner, address _spender) external view returns (uint256) {
-        return 0; // TODO:
+    // function allowance(address _owner, address _spender) external view returns (uint256) {
+    //     return 0; // TODO:
+    // }
+
+    function approve(address spender, uint256 value) public virtual returns (bool) {
+        address owner = msg.sender;
+        _approve(owner, spender, value);
+        return true;
     }
 
-    function approve(address _spender, uint256 _value) external returns (bool) {
-        return false; // TODO:
+    function _approve(address owner, address spender, uint256 value) internal virtual {
+        if (owner == address(0)) {
+            revert();
+        }
+        if (spender == address(0)) {
+            revert();
+        }
+        allowances[owner][spender] = value;
+        emit Approval(owner, spender, value);
     }
 
-    function balanceOf(address _owner) external view returns (uint256) {
-        return 0; // TODO:
+    function balanceOf(address account) public view virtual returns (uint256) {
+        return balances[account];
     }
 
     function decimals() external view returns (uint8) {
-        return 0; // TODO:
+        return 18;
     }
 
     function name() external view returns (string memory) {
-        return "Aori LP Vault"; // TODO:
+        return _name;
     }
 
     function symbol() external view returns (string memory) {
-        return "aLP"; // TODO:
+        return _symbol;
     }
 
     function totalSupply() external view returns (uint256) {
-        return 0; // TODO:
+        return _totalSupply;
     }
 
     function transfer(address _to, uint256 _value) external returns (bool) {
@@ -145,6 +172,10 @@ contract AoriLpVault is IERC1271, FlashExecutor, IERC4626 {
         uint256 _value
     ) external returns (bool) {
         return false; // TODO:
+    }
+
+    function allowance(address owner, address spender) public view virtual returns (uint256) {
+        return allowances[owner][spender];
     }
 
     /*//////////////////////////////////////////////////////////////
